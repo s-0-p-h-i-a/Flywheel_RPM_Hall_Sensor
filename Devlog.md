@@ -1,6 +1,6 @@
 # Flywheel RPM Sensor Emulation – Development Log
 
-**Project Dates:** 13/10–14/10/2025  
+**Project Dates:** 13/10–12/11/2025  
 **Objective:** Proof-of-concept for measuring rotational speed using a Hall effect sensor, exploring embedded sensor timing, PWM control, and iterative debugging.
 
 ---
@@ -19,14 +19,15 @@
 - SG90 servo motor
 - Cardboard disc with one magnet mounted on the servo
 
-
 **Planned Behaviour:**
 
 - Servo: continuous rotation controlled by push button
-- Hall sensor: detect magnet passage, calculate current RPM
-- RPM calculation: `currentRPM = 60000 ms / currentTimeWindow`
-- Display average RPM in Serial Plotter
 
+- Hall sensor: detect magnet passage, calculate current RPM
+
+- RPM calculation: `currentRPM = 60000 ms / currentTimeWindow`
+
+- Display average RPM in Serial Plotter
 
 **Observations & Debugging:**
 
@@ -35,7 +36,6 @@
 - Hall sensor responded to fridge magnet; experimented with positioning:
 
     - Best detection when magnet passes directly below module.
-
     - Investigated: conductive elements on sensor module may influence EMF.
 
 - Tested RPM calculation and Serial Plotter output by moving magnet manually.
@@ -43,23 +43,20 @@
 - Servo not moving:
 
     - Hall sensor and button confirmed working
-
     - Initially suspected blocking loops in servo code; tested servo in isolation → still not moving
 
 - Identified power issue: Arduino 5V insufficient for SG90 under load.
 
 - Researched alternative powering:
-    
+
     - 9V battery too high for servo
-
     - Attempted wall adapter via USB cable → fluctuating current, unreliable
-
     - Cut/stripped USB wire for temporary connection
+
 
 **Outcome:**
 
 - Servo still not moving; root cause narrowed to insufficient current.
-
 - Planned to rewire and continue troubleshooting the next day.
 
 ---
@@ -70,34 +67,79 @@
 **Troubleshooting Steps:**
 
 - Narrowed probable issues to:
+    
     1. Stripped USB cable: poor contact, broken wires
     2. Wall adapter: known fluctuating current
-
+        
 - Practiced proper wire stripping technique; learned to avoid exposed copper and ensure solid connections.
+
 - Contacted electronics repair shop regarding soldering options → they do not provide the specific service needed.
 
 **Key Learnings:**
 
 - Gained hands-on experience with **basic electronics troubleshooting**.
-
 - Applied **structured reasoning** to isolate hardware vs. software issues.
-
 - Applied **iterative problem-solving**: tested multiple hypotheses, documented outcomes, and planned next steps.
+
+---
+## Day 3 – Build & Test Plan Development, Materials Acquisition (12/11)
+
+**Focus:** Prepare a comprehensive plan for safe servo powering, servo power supply testing, breadboard testing, and control logic.
+
+**New Components Acquired:**
+
+- Additional USB-A cables (for splicing and backup)
+- Hi-fi power + GND wire roll (sturdier than USB cores)
+- Heat-shrink tubing for insulated splices
+- Electrical tape and zip ties for eventual mechanical reinforcement
+- Multimeter for voltage/current verification
+
+**Build & Test Plan Concepts:**
+
+- **Stepwise, incremental testing:**
+
+    1. Verify spliced wires for reliable power delivery.
+    2. Confirm breadboard connections using LEDs and resistors.
+    3. Add control elements (button, potentiometer) and test logic.
+    4. Integrate SG90 servo with safe power supply and signal control.
+    5. Introduce Hall sensor for RPM measurement and averaging.
+
+- **Safety-first wiring practices:**
+    
+    - Minimal exposed copper for initial tests
+    - Heat-shrink and tape to prevent shorts
+    - Zip ties to relieve mechanical strain
+
+- **Servo speed and control planning:**
+    
+    - Maximum speed derived from datasheet: 0.1 s / 60° → 100 RPM
+    - Step increments (e.g., 12° per 20 ms) chosen to match ideal max speed
+    - Button: on/off control
+    - Potentiometer: mapped to 20–80 ms delay for variable speed
+
+- **Virtual RPM display:**
+    
+    - Formula based on step size and delay to simulate idealised virtual RPM values (based on datasheet max speed and min delay interval) in Serial Plotter before Hall sensor integration
+
+**Outcome:**
+
+- Build & Test Plan drafted as a central reference for all wiring, control logic, and testing steps.
+- Materials purchased and organised for next stage of hands-on implementation.
+- Plan provides both **safe testing workflow** and **guidance for iterative development**.
 
 ---
 ## Insights & Relevance
 
-- Successfully demonstrated **signal acquisition, timing, and RPM calculation**, despite incomplete servo operation.
-
-- Project served as learning process on hardware handling and safe/effective wiring practices.
-
-- Single-magnet disc setup parallels automotive flywheel sensors:
-
-    - Sensor reacts to a magnet (opposite of magnetized flywheel Hall sensor)
-
-    - Single pulse per rotation is analogous to double-LOW signal from missing teeth in real flywheels
+- Documenting a structured plan enhances **reproducibility** and **debug efficiency**.
+- Pre-planned testing steps reduce risk of hardware damage and help isolate software/hardware issues.
+- Understanding servo max speed and mapping to delays/steps ensures predictable control before sensor feedback is added.
 
 ---
+
 ## Next Steps
 
-- Implement reliable servo powering for continuous rotation.
+- Implement spliced power supply and breadboard test with LED.
+- Add push button and potentiometer control for SG90.
+- Validate virtual RPM readings in Serial Plotter.
+- Integrate Hall sensor for real RPM measurement.
+- Iterate and refine servo.move logic, step size, and delay mapping.
