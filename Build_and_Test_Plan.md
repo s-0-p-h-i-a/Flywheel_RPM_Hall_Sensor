@@ -56,7 +56,7 @@ Sensor shield and arduino board have been proven to work, move on to testing ser
 ---
 ### If Tests B1 and B2 pass:
 1. Connect servo power and GND to breadboard, signal to arduino board
-2. Connect arduino to computer, run [servoTest1](./Tests/servoTest1.ino)
+2. Connect arduino to computer, run [servoTest1](./Test_Drafts/servoTest1.ino)
 
 If it doesn't work:
 
@@ -92,9 +92,9 @@ Checked data sheet for servo speed and calculated max RPM and angle covered in o
 2. If test run ok: edit servo.move so the steps are 10°
 3. Add control:
 	1. Button:
-		- Run [servoTestButton](./Tests/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
+		- Run [servoTestButton](./Test_Drafts/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
 	2. Potentiometer:
-		- Run [servoTestPot](./Tests/servoTestPot.ino)
+		- Run [servoTestPot](./Test_Drafts/servoTestPot.ino)
 		- Use read values to define (inversely proportional) length of delay in servo.move
 		- If pot reads 0: empty if branch, does not call servo.move
 		- Else: map pot values 0 - 1023 to delay values 80ms - 20ms

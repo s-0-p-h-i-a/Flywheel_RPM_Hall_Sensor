@@ -133,6 +133,8 @@
 - Cleaned up & implemented new logic idea in main program
 - Wrote 3 servo test script drafts: simple continuous movement (servoTest1), button-controlled movement (servoTestButton), potentiometer-controlled movement (servoTestPot)
 
+**NOTE:** main and test scripts still contain logic mistakes to be fixed later
+
 ---
 ## Insights & Relevance
 

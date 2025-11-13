@@ -67,6 +67,7 @@ implemented
 - Level 2, map speed to pot level: 12° increments, delay range 20ms - 80ms -> 60ms interval
 	-> delay = 80 - potLevel * (60/1023)
 - It may be easier to round down max speed to 10° increments... will have to check how this affects RPM calc math
+- ChatGPT check suggests logic and math errors in main and test script drafts
 - TO-DO:
-	- Check 12° steps math
+	- Check logic and math in all code
 	- Move RPM calculation to separate function

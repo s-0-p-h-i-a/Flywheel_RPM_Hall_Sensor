@@ -3,7 +3,7 @@
 **Goal:**  
 Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall sensor, practicing **embedded signal acquisition, sensor processing, and iterative debugging**. Explores hardware constraints, applies on-the-fly learning, and parallels real automotive flywheel sensors.
 
-See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
+See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan for wiring, component testing, and control logic implementation.
 
 ---
 ## Hardware
@@ -26,7 +26,9 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 - Hall sensor: detects magnet passing and calculates instantaneous and averaged RPM
 - Serial output: prints RPM values and potentiometer-derived speed for real-time monitoring
 
-> ⚠️ Note: Servo powering is now planned via spliced USB/hi-fi cable setup according to Build & Test Plan; still in testing phase. See [Tests](./Tests) for test script sketches.
+> ⚠️ Note: Main code not functional yet. Servo powering is now planned via spliced USB/hi-fi cable setup according to Build & Test Plan; still in testing phase. See [Test Drafts](./Test_Drafts) for test script sketches.
+
+**NOTE:** main and test scripts still contain logic mistakes to be fixed later.
 
 ---
 ## Observations / Relevance to Automotive Sensors
@@ -38,7 +40,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 
 - Developed and structured a **Build & Test Plan** to verify wiring, breadboard connections, control logic, and sensor integration before full servo deployment
 
-- Wrote test script drafts to streamline hardware setup debugging progress
+- Wrote test script drafts to streamline hardware setup debugging progress. **NOTE:** main and test scripts still contain logic mistakes to be fixed later
 
 - Explored sensor placement and signal reliability to maximise detection accuracy
 
@@ -55,7 +57,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 ---
 ## Usage & Testing
 
-> ⚠️ Note: The current Arduino sketch may not be fully functional. The main focus of this project iteration is hardware setup, wiring, and planning. Code will require editing and verification during progressive reintegration and testing of all components.
+> ⚠️ Note: The current Arduino sketch is not functional. The main focus of this project iteration is hardware setup, wiring, and planning. Code will require editing and verification during progressive reintegration and testing of all components.
 
 **1. Hardware Setup**
 - Connect Arduino Uno to sensor shield.
