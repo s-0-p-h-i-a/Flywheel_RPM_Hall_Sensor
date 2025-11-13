@@ -54,3 +54,19 @@ LOG:
 2. Wall adapter known to have fluctuating current: when used to charge phone, charge times vary a lot and can be very long
 - Cut and stripped cable repeatedly until figuring out proper technique to strip without breaking copper wires
 - Contacted electronics repair shop to ask about copper soldering to strengthen the wires: they do not do this specific type of soldering at their shop
+
+
+13/11
+
+- Clean up / rewrite main program
+- Write script for test1: simple slow continuous servo motion, 1° increments
+- For now, keeping main program in one file for simplicity, will refactor into multiple files once full behaviour is
+implemented
+- Write button test script, 10° increments
+- Write potentiometer test script: level 1 continuous movement (10° increments) for any non zero values
+- Level 2, map speed to pot level: 12° increments, delay range 20ms - 80ms -> 60ms interval
+	-> delay = 80 - potLevel * (60/1023)
+- It may be easier to round down max speed to 10° increments... will have to check how this affects RPM calc math
+- TO-DO:
+	- Check 12° steps math
+	- Move RPM calculation to separate function

@@ -55,9 +55,8 @@ Sensor shield and arduino board have been proven to work, move on to testing ser
 
 ---
 ### If Tests B1 and B2 pass:
-1. Write short test function with slow movement (light load)
-2. Connect servo power and GND to breadboard, signal to arduino board
-3. Connect arduino to computer, upload sketch, test servo
+1. Connect servo power and GND to breadboard, signal to arduino board
+2. Connect arduino to computer, run [servoTest1](./Tests/servoTest1.ino)
 
 If it doesn't work:
 
@@ -89,14 +88,17 @@ Checked data sheet for servo speed and calculated max RPM and angle covered in o
 
 ---
 ## Rebuild sketch, part 1:
-1. Edit servo.move function for slightly faster movement then test run
-2. If test run ok: edit servo.move so the steps are 12°
+1. Run [servoTest1](./Tests/servoTest1.ino) with 5° increments
+2. If test run ok: edit servo.move so the steps are 10°
 3. Add control:
-	1. Button: simple on/off, fixed speed. Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
+	1. Button:
+		- Run [servoTestButton](./Tests/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
 	2. Potentiometer:
-		- Use read values to define (inversely proportional) length of millis delay in servo.move
+		- Run [servoTestPot](./Tests/servoTestPot.ino)
+		- Use read values to define (inversely proportional) length of delay in servo.move
 		- If pot reads 0: empty if branch, does not call servo.move
-		- Else: map pot values from 0 - 1023 to 80ms - 20ms (isolate pot.read == 0 into separate if branch)
+		- Else: map pot values 0 - 1023 to delay values 80ms - 20ms
+		- First test with simpler 10° increment math, then with 12°
 4. Implement 'virtual' RPM value reading and display in serial plotter:
 	- RPM = (20 / delay) * 100
 	- Define getRPM function using this formula

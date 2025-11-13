@@ -26,7 +26,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 - Hall sensor: detects magnet passing and calculates instantaneous and averaged RPM
 - Serial output: prints RPM values and potentiometer-derived speed for real-time monitoring
 
-> ⚠️ Note: Servo powering is now planned via spliced USB/hi-fi cable setup according to Build & Test Plan; still in testing phase.
+> ⚠️ Note: Servo powering is now planned via spliced USB/hi-fi cable setup according to Build & Test Plan; still in testing phase. See [Tests](./Tests) for test script sketches.
 
 ---
 ## Observations / Relevance to Automotive Sensors
@@ -37,6 +37,8 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 ## Learning & Debugging Highlights
 
 - Developed and structured a **Build & Test Plan** to verify wiring, breadboard connections, control logic, and sensor integration before full servo deployment
+
+- Wrote test script drafts to streamline hardware setup debugging progress
 
 - Explored sensor placement and signal reliability to maximise detection accuracy
 

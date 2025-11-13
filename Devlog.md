@@ -128,6 +128,12 @@
 - Plan provides both **safe testing workflow** and **guidance for iterative development**.
 
 ---
+## 13/11: Code Clean-Up and Test Script Drafts
+
+- Cleaned up & implemented new logic idea in main program
+- Wrote 3 servo test script drafts: simple continuous movement (servoTest1), button-controlled movement (servoTestButton), potentiometer-controlled movement (servoTestPot)
+
+---
 ## Insights & Relevance
 
 - Documenting a structured plan enhances **reproducibility** and **debug efficiency**.

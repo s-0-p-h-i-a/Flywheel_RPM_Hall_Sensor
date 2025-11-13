@@ -51,8 +51,15 @@ LOG:
 - Cut and stripped cable repeatedly until figuring out proper technique to strip without breaking copper wires
 - Contacted electronics repair shop to ask about copper soldering to strengthen the wires: they do not do this specific type of soldering at their shop
 
+13/11
+- Quick code clean up before continuing with hardware debugging:
+	-> fixed function/variable names, redundant servo moving logic,
+	adjusted servo steps from 1° to 12° for max speed as default, formatting
+	-> implemented new servo moving math to account for 180 not being a multiple of 12
+
 */
 
+#include <map>
 #include <Servo.h>
 
 const int servoPin(7);
@@ -71,8 +78,13 @@ float averageRPM(0);
 
 unsigned long lastServoMove = 0;
 
+int currentAngle(0);
 int servoAngle = 0;
-int servoDirection = 1; 
+int servoDirection = 12;
+
+int secondLastAngle(0);
+int lastAngle(0);
+			
 
 void setup() {
 
@@ -84,23 +96,18 @@ void setup() {
 
 }
 
-void spinServo();
+void moveServo(unsigned long now);
 
 void loop() {
 
   unsigned long now = millis();
 
-  int buttonState = digitalRead(buttonPin);
+  bool buttonState = digitalRead(buttonPin);
 
-  //moveServo(now);
-  serv0.write(0);
-
-  if (buttonState == HIGH) {
-    Serial.println("pressed");
-    moveServo(now);
-    serv0.write(0);
-    
-  } else { serv0.write(90);}**/
+  if (buttonState) {
+    Serial.print("Pressed");
+    moveServo(now);    
+  }
 
   int sensorState = digitalRead(sensorPin);
 
@@ -108,6 +115,7 @@ void loop() {
 
     currentSensorRead = millis();
     currentTimeWindow = currentSensorRead - lastSensorRead;
+    
     if (lastTimeWindow == 0) { lastTimeWindow = currentTimeWindow;}
     averageWindow = (currentTimeWindow + lastTimeWindow) / 2.0;
     
@@ -115,41 +123,59 @@ void loop() {
     currentRPM = 60000.0 / averageWindow;
     averageRPM = (currentRPM + averageRPM) / 2.0;
 
+	}
   }
 
-    if (sensorState == LOW) {
-    unsigned long currentSensorRead = now;
-    unsigned long currentTimeWindow = currentSensorRead - lastSensorRead;
+	Serial.print("RPM:");
+	Serial.println(averageRPM);
+	Serial.print("Sensor:");
+	Serial.println(digitalRead(sensorPin) * 100);
 
-    if (currentTimeWindow > 0) {
-      float currentRPM = 60000.0 / currentTimeWindow;
-      if (averageRPM == 0) averageRPM = currentRPM;
-      averageRPM = (currentRPM + averageRPM) / 2.0;
-    }
-
-    lastSensorRead = currentSensorRead;
-    lastTimeWindow = currentTimeWindow;
-  }
-
-
-  int value1 = digitalRead(sensorPin) * 100;
-  Serial.print("RPM:");
-  Serial.println(averageRPM);
-
-
-  lastSensorRead = currentSensorRead;
-  lastTimeWindow = currentTimeWindow;
-
+	lastSensorRead = currentSensorRead;
+	lastTimeWindow = currentTimeWindow;
+  
 }
 
 void moveServo(unsigned long now) {
-  if (now - lastServoMove >= 15) { 
-    servoAngle += servoDirection;
-
-    if (servoAngle >= 180) servoDirection = -1;
-    else if (servoAngle <= 0) servoDirection = 1;
-
-    serv0.write(servoAngle);
-    lastServoMove = now;
-  }
+	
+	bool moveNow = now - lastServoMove >= 20;
+	
+	if (moveNow) {
+		
+		// First loop
+		if ( lastAngle == secondLastAngle) {
+			currentAngle = 12;
+		}
+		
+		// Forward motion: 0 -> 180
+		if (lastAngle - secondLastAngle > 0) {
+			
+			if (lastAngle >= 168 && lastAngle < 180) {
+				serv0.write(180);
+				currentAngle = 12 - 180 + lastAngle;
+				serv0.write(currentAngle);
+			}
+			else {
+				currentAngle = lastAngle + 12;
+				serv0.write(currentAngle);
+			}	
+		}
+		
+		// Backward motion: 180 -> 0
+		else if (lastAngle - secondLastAngle < 0) {
+			
+			if (lastAngle < 12) {
+				serv0.write(0);
+				currentAngle = 12 - lastAngle;	
+			}
+			else {
+				currentAngle = lastAngle - 12;
+				serv0.write(currentAngle);
+			}	
+		}
+	
+	secondLastAngle = lastAngle;
+	lastAngle = currentAngle;	
+	lastServoMove = now;
+	}
 }
