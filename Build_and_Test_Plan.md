@@ -88,7 +88,7 @@ Checked data sheet for servo speed and calculated max RPM and angle covered in o
 
 ---
 ## Rebuild sketch, part 1:
-1. Run [servoTest1](./Tests/servoTest1.ino) with 5° increments
+1. Run [servoTest1](./Test_Drafts/servoTest1.ino) with 5° increments
 2. If test run ok: edit servo.move so the steps are 10°
 3. Add control:
 	1. Button:
