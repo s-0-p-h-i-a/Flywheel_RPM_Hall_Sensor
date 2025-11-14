@@ -4,6 +4,23 @@
 **Objective:** Proof-of-concept for measuring rotational speed using a Hall effect sensor, exploring embedded sensor timing, PWM control, and iterative debugging.
 
 ---
+## Latest:
+
+### 15/11 – Servo Flywheel Hall Sensor Progress
+
+- Successfully spliced hi-fi and USB cables; secured with electrical tape and zip ties. Metal crimp sleeves provide solid contact.
+
+- Multimeter tests: stable 5.09 V at first splice.
+
+- Resolved breadboard fit issues: thick hi-fi wires incompatible with Dupont/breadboard slots, solved by splicing to jumper wires and immobilizing with tape/zip ties.
+
+- Multimeter tests: stable 5.09 V at second splice, 5.08 V at breadboard; LED test confirms steady power.
+
+- Servo initially did not move due to split Vcc/GND rails; moving all connections to same breadboard half solved the issue.
+
+- Confirmed SG90 is a standard servo (sweeps 0–180°), not continuous rotation; will update logic and RPM calculation to account for sweeping motion and two sensor passes per sweep.
+
+---
 ## Day 1 – Initial Setup & Testing (13/10)
 
 **Goal:**
@@ -143,10 +160,8 @@
 - Understanding servo max speed and mapping to delays/steps ensures predictable control before sensor feedback is added.
 
 ---
-
 ## Next Steps
 
-- Implement spliced power supply and breadboard test with LED.
 - Add push button and potentiometer control for SG90.
 - Validate virtual RPM readings in Serial Plotter.
 - Integrate Hall sensor for real RPM measurement.

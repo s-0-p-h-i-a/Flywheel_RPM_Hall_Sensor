@@ -6,32 +6,33 @@ Bought materials and planned sturdier power supply wiring for SG90 servo:
 - Multimeter for circuit testing
 - USB-A cables (1 for use, 1 for backup)
 - Hi-fi power + GND cables roll
-- Heat-shrink tubing
+- Crimp insulation sleeves
 - Electrical tape
 - Zip ties
 
 ---
-## Build plan:
+## ✅ Build plan:
 1. Strip USB-A cable, separate and strip power and GND wires
 2. Separate and strip power and GND wires on hi-fi cable
 3. Twist exposed copper wires together
-4. Cover with heat-shrink tube (with slack for the wires to prevent strain)
+4. Cover with crimp sleeve (with slack for the wires to prevent strain)
 5. Use electrical tape and zip ties as needed to reinforce the splice
 
 ---
 ## Test plan:
 
-### Test A: Splice test
+### ✅ Test A: Splice test
 1. Strip small section of the hi-fi cables
 2. Connect USB wall adapter to spliced cable and plug it
 3. Use multimeter to test via short exposed copper wires
 
 If there are issues: try using another wall adapter (same V and A).
 
-If Test A passes:
+### If Test A passes:
+- Result: stable 5.09V reading
 
 ---
-### Test B1: Breadboard connections test level 1
+### ## ✅ Test B1: Breadboard connections test level 1
 1. Strip more off hi-fi cables
 2. Test if twisted exposed wires are strong enough to go into breadboard slots:
 	1. If yes and contact is solid: continue with this setup
@@ -54,9 +55,9 @@ If issues: check wiring, try different components.
 Sensor shield and arduino board have been proven to work, move on to testing servo.
 
 ---
-### If Tests B1 and B2 pass:
+### ✅  If Tests B1 and B2 pass:
 1. Connect servo power and GND to breadboard, signal to arduino board
-2. Connect arduino to computer, run [servoTest1](./Test_Drafts/servoTest1.ino)
+2. Connect arduino to computer, run [servoTest1](./Tests/servoTest1.ino)
 
 If it doesn't work:
 
@@ -88,13 +89,13 @@ Checked data sheet for servo speed and calculated max RPM and angle covered in o
 
 ---
 ## Rebuild sketch, part 1:
-1. Run [servoTest1](./Test_Drafts/servoTest1.ino) with 5° increments
+1. Run [servoTest1](./Tests/servoTest1.ino) with 5° increments
 2. If test run ok: edit servo.move so the steps are 10°
 3. Add control:
 	1. Button:
-		- Run [servoTestButton](./Test_Drafts/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
+		- Run [servoTestButton](./Tests/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
 	2. Potentiometer:
-		- Run [servoTestPot](./Test_Drafts/servoTestPot.ino)
+		- Run [servoTestPot](./Tests/servoTestPor.ino)
 		- Use read values to define (inversely proportional) length of delay in servo.move
 		- If pot reads 0: empty if branch, does not call servo.move
 		- Else: map pot values 0 - 1023 to delay values 80ms - 20ms
@@ -130,3 +131,4 @@ If issues appear, work back stepwise to fix them, then repeat steps until everyt
 Notes:
 - What about trying static 20ms delay and vary step angle instead?
 	-> write & test alternative servo.move using new getStepAngle function to convert pot reading into 0° - 12° range 
+- Considering rounding down to 10° maximum step length for simpler math + no edge cases from 180 not being a multiple of 12.

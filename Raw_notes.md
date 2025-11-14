@@ -1,6 +1,6 @@
 TEST / PROOF OF CONCEPT: hall flywheel sensor emulator
 
-13/10
+# 13/10
 
 GOAL:
 
@@ -48,7 +48,7 @@ LOG:
 - Setup not working: issue narrowed down to servo motor no getting enough current
 - Will rewire tomorrow then start again
 
-  
+# 14/10  
 - Next day, considered potential servo powering issues across the setup, narrowed down to two main probable issues:
 1. Stripped usb cable: insufficient breadboard slot contact and too many broken copper wires
 2. Wall adapter known to have fluctuating current: when used to charge phone, charge times vary a lot and can be very long
@@ -56,7 +56,7 @@ LOG:
 - Contacted electronics repair shop to ask about copper soldering to strengthen the wires: they do not do this specific type of soldering at their shop
 
 
-13/11
+# 13/11
 
 - Clean up / rewrite main program
 - Write script for test1: simple slow continuous servo motion, 1° increments
@@ -71,3 +71,35 @@ implemented
 - TO-DO:
 	- Check logic and math in all code
 	- Move RPM calculation to separate function
+
+
+# 15/11
+
+- Successfully spliced USB and hi-fi cables:
+	- Protective tubing turned out not to be heat shrink tubing, it is a crimp insulation sleeve
+	- Used electrical tape + zip ties to secure splice
+	- Used electrical tape to secure + protect the thin exposed power+gnd wires from the usb cable (no exposed copper, but the plastic casing felt too flimsy to stay exposed)
+- Multimeter test: stable 5.09V reading, no fluctuation
+- New issue: hi-fi cable copper wiring too thick for breadboard or dupont
+	- Noticed that copper wires get tightly pressed together when getting cut:
+	- -> twist wires, make diagonal cut, press together with clamp
+	- Still doesn't fit
+- Alternative: use previously stripped usb cable kept as backup
+- Was able to directly slot backup cable wires into breadboard rails using jumper wire tip
+- Multimeter probes do not fit into breadboard slots? Reading 0V
+- -> move on to LED test -> did not work
+- Solution found:
+	- Backup cable copper wires were too weak to slot into female dupont
+	- -> tested other wires, found slightly looser dupont
+	- Inserted copper wires by screwing female dupont onto them, following same direction as the wires twist, added electrical tape
+- Multimeter test: current fluctuates a lot, but does reach 5V
+	- Maybe due to tape not properly sealing the thin wires?
+	- Use zip ties to reinforce insulation
+- New idea: splice hi-fi and jumper wire
+- It works! Stable 5.09V reading when the wires are immobilised
+- Breadboard test: stable 5.08V
+- LED test also ok: no flicker
+- Ran into issues powering the servo, solved: breadboard vcc and gnd rails have gaps in the middle -> move all components to the same half of the board
+- Previously assumed servo could spin continuously, it can only sweep back and forth
+	- -> need to edit main and test scripts to reflect that
+	- RPM calculation: value needs to be halved to account for 2 magnet passes for each rev

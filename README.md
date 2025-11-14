@@ -3,7 +3,20 @@
 **Goal:**  
 Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall sensor, practicing **embedded signal acquisition, sensor processing, and iterative debugging**. Explores hardware constraints, applies on-the-fly learning, and parallels real automotive flywheel sensors.
 
-See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan for wiring, component testing, and control logic implementation.
+See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
+
+---
+## Latest Update (15/11)
+
+- Successfully spliced hi-fi and USB wires for stable servo powering; reinforced with tape and zip ties.
+
+- Breadboard Vcc/GND rail gaps identified and resolved; all components now share the same segment.
+
+- Verified stable voltage: 5.09 V at splice, 5.08 V at breadboard.
+
+- SG90 servo confirmed as standard (0–180° sweep only); updated logic and RPM calculation to account for two sensor passes per sweep.
+
+- LED test and initial sensor/servo integration verified; hardware setup stable for first proof-of-concept runs.
 
 ---
 ## Hardware
@@ -11,12 +24,14 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan
 - Arduino Uno + V5 sensor shield
 - Hall effect sensor module
 - Digital push button module
-- SG90 servo motor
+- SG90 standard servo motor (0–180° sweep)
 - Cardboard disc with one magnet stuck to the edge, mounted on the servo
 - Hi-fi power + GND wire roll (for safer, sturdier servo wiring)
 - Additional USB-A cables (for splicing and backup)
-- Heat-shrink tubing, electrical tape, and zip ties for secure connections
+- Crimp insulation tubes, electrical tape, and zip ties for secure connections
 - Multimeter for verification and troubleshooting
+
+> ⚠️ Note: Servo powering now uses spliced USB/hi-fi wires; breadboard Vcc/GND rail gaps were discovered and addressed for reliable connection.
 
 ---
 ## Functionality
@@ -26,9 +41,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan
 - Hall sensor: detects magnet passing and calculates instantaneous and averaged RPM
 - Serial output: prints RPM values and potentiometer-derived speed for real-time monitoring
 
-> ⚠️ Note: Main code not functional yet. Servo powering is now planned via spliced USB/hi-fi cable setup according to Build & Test Plan; still in testing phase. See [Test Drafts](./Test_Drafts) for test script sketches.
-
-**NOTE:** main and test scripts still contain logic mistakes to be fixed later.
+> ⚠️ Note: The SG90 is a standard servo and can only sweep back and forth; previous assumptions of continuous rotation were incorrect. RPM calculation now accounts for **two sensor passes per sweep cycle**.
 
 ---
 ## Observations / Relevance to Automotive Sensors
@@ -39,8 +52,6 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan
 ## Learning & Debugging Highlights
 
 - Developed and structured a **Build & Test Plan** to verify wiring, breadboard connections, control logic, and sensor integration before full servo deployment
-
-- Wrote test script drafts to streamline hardware setup debugging progress. **NOTE:** main and test scripts still contain logic mistakes to be fixed later
 
 - Explored sensor placement and signal reliability to maximise detection accuracy
 
@@ -54,10 +65,16 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan
 
 - Practiced **adaptivity and creative problem-solving**, considering multiple potential fixes in parallel
 
+- Learned to address breadboard Vcc/GND rail gaps and accommodate thick hi-fi wires via jumper splicing
+
+- Verified stable voltage (5.09 V at splice, 5.08 V at breadboard) for safe testing
+
+- Planned to update logic to reflect standard servo sweep behaviour and RPM calculation to account for two magnet passes per sweep
+
 ---
 ## Usage & Testing
 
-> ⚠️ Note: The current Arduino sketch is not functional. The main focus of this project iteration is hardware setup, wiring, and planning. Code will require editing and verification during progressive reintegration and testing of all components.
+> ⚠️ Note: The current Arduino sketch may not be fully functional. The main focus of this project iteration is hardware setup, wiring, and planning. Code will require editing and verification during progressive reintegration and testing of all components.
 
 **1. Hardware Setup**
 - Connect Arduino Uno to sensor shield.
@@ -87,7 +104,6 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step plan
 ---
 ## Next Steps
 
-- Complete reliable servo powering and breadboard connections as outlined in the Build & Test Plan
 - Validate potentiometer and push button control for variable-speed operation
 - Integrate Hall sensor to calculate real-time RPM
 - Test Serial Plotter display for both virtual and sensor-derived RPM readings
