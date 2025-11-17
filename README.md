@@ -6,7 +6,7 @@ Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall
 See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
 
 ---
-## Latest Update (16/11): Main Program Refactor
+## Latest Update (16/11): Main Program Refactor Draft (NOT fully functional yet)
 
 - New speed regulation logic now using angle instead of delay
 - Servo previously assumed to move continuously: sweeping movement required changes for accurate 'RPM' calculation -> only count first sensor trigger event, then every other event
