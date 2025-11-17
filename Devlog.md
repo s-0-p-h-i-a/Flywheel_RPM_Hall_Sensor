@@ -190,3 +190,4 @@
 
 - Add push button and potentiometer control for SG90.
 - Validate RPM readings in Serial Plotter.
+- Implement visual RPM range display via RGB LED phases.

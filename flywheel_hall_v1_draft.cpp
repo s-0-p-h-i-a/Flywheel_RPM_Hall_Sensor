@@ -42,6 +42,19 @@
  * - Signal processing math for RPM, angle and pot value display: so that all variable variations can be visualised
  * at once without overlap + without loss of detail (angle, RPM, and pot value all have different magnitudes)
  * 
+ * TO-DO:
+ * - Integrate RGB LED for RPM visualisation?
+ * 	- 3 phases (based on potentiometer reading):
+ * 		- Phase 1: 100 - 400
+ * 		- Phase 2: 401 - 700
+ * 		- Phase 3: 701 - 1000
+ * 
+ * 	- Green -> (Turquoise) -> Blue -> (Purple) -> Red
+ * 
+ * 	- Phase 1: 255 Green, 0 Blue -> 128 Green, 127 Blue
+ * 	- Phase 2: 127 Green, 128 Blue -> 0 Green, 255 Blue ; 255 Blue, 0 Red -> 127 Blue, 128 Blue, 127 Red
+ * 	- Phase 3: 127 Blue - 128 Red -> 0 Blue - 255 Red
+ * 
  * **/
 
 const int servoPin(7);

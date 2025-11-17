@@ -5,8 +5,6 @@ Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall
 
 See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
 
-Current main program draft: [flywheel_hall_v1_draft.cpp](flywheel_hall_v1_draft.cpp) (NOT fully functional or tested yet).
-
 ---
 ## Latest Update (16/11): Main Program Refactor
 
@@ -106,4 +104,5 @@ Current main program draft: [flywheel_hall_v1_draft.cpp](flywheel_hall_v1_draft.
 - Validate potentiometer and push button control for variable-speed operation
 - Integrate Hall sensor to calculate real-time RPM
 - Test Serial Plotter display for potentiometer, step angle and RPM readings
+- Implement visual RPM range display via RGB LED phases
 - Progress towards simulating real-world automotive flywheel sensor behaviour
