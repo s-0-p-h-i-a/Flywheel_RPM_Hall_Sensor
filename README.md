@@ -6,17 +6,14 @@ Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall
 See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
 
 ---
-## Latest Update (15/11)
+## Latest Update (16/11): Main Program Refactor
 
-- Successfully spliced hi-fi and USB wires for stable servo powering; reinforced with tape and zip ties.
-
-- Breadboard Vcc/GND rail gaps identified and resolved; all components now share the same segment.
-
-- Verified stable voltage: 5.09 V at splice, 5.08 V at breadboard.
-
-- SG90 servo confirmed as standard (0–180° sweep only); updated logic and RPM calculation to account for two sensor passes per sweep.
-
-- LED test and initial sensor/servo integration verified; hardware setup stable for first proof-of-concept runs.
+- New speed regulation logic now using angle instead of delay
+- Servo previously assumed to move continuously: sweeping movement required changes for accurate 'RPM' calculation -> only count first sensor trigger event, then every other event
+- State machine/sequential circuit logic used for tracking sensor trigger events, time window for RPM calculation, RPM values across loops in case of no potentiometer input changes + for averaging
+- If branch instead of for loops for immediate servo response to speed regulation
+- Signal processing math for clear visualisation of values in different magnitudes without overlap on serial monitor
+- Planned: move from single-file sketches to multi-file program structure (after testing)
 
 ---
 ## Hardware

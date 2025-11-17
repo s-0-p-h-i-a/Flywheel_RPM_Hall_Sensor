@@ -6,19 +6,11 @@
 ---
 ## Latest:
 
-### 15/11 – Servo Flywheel Hall Sensor Progress
-
-- Successfully spliced hi-fi and USB cables; secured with electrical tape and zip ties. Metal crimp sleeves provide solid contact.
-
-- Multimeter tests: stable 5.09 V at first splice.
-
-- Resolved breadboard fit issues: thick hi-fi wires incompatible with Dupont/breadboard slots, solved by splicing to jumper wires and immobilizing with tape/zip ties.
-
-- Multimeter tests: stable 5.09 V at second splice, 5.08 V at breadboard; LED test confirms steady power.
-
-- Servo initially did not move due to split Vcc/GND rails; moving all connections to same breadboard half solved the issue.
-
-- Confirmed SG90 is a standard servo (sweeps 0–180°), not continuous rotation; will update logic and RPM calculation to account for sweeping motion and two sensor passes per sweep.
+### 16/11 Main Program Refactor:
+- New logic for speed regulation (angle- instead of delay-based) and servo control
+- Use of state machine and sequential circuit to initialise and keep track of variables across loop
+- New servo control logic for immediate response
+- Signal processing for clear visualisation on serial monitor
 
 ---
 ## Day 1 – Initial Setup & Testing (13/10)
@@ -151,6 +143,40 @@
 - Wrote 3 servo test script drafts: simple continuous movement (servoTest1), button-controlled movement (servoTestButton), potentiometer-controlled movement (servoTestPot)
 
 **NOTE:** main and test scripts still contain logic mistakes to be fixed later
+
+---
+## 15/11 – Servo Powering Solved
+
+- Successfully spliced hi-fi and USB cables; secured with electrical tape and zip ties. Metal crimp sleeves provide solid contact.
+
+- Multimeter tests: stable 5.09 V at first splice.
+
+- Resolved breadboard fit issues: thick hi-fi wires incompatible with Dupont/breadboard slots, solved by splicing to jumper wires and immobilizing with tape/zip ties.
+
+- Multimeter tests: stable 5.09 V at second splice, 5.08 V at breadboard; LED test confirms steady power.
+
+- Servo initially did not move due to split Vcc/GND rails; moving all connections to same breadboard half solved the issue.
+
+- Confirmed SG90 is a standard servo (sweeps 0–180°), not continuous rotation; will update logic and RPM calculation to account for sweeping motion and two sensor passes per sweep.
+
+---
+## 16/11 Main Program Refactor
+
+- Decided to refactor instead of trying to fix messy v0 code
+
+- Main concept changes: 
+	- Different logic for speed control, now angle-based instead of delay-based
+	- Servo sweep motion issues for RPM calculation: 
+		- Hall sensor triggered twice each "revolution"
+		- Time interval of the magnet passing below sensor
+		- Solution: only track first sensor triggering event + every other event after that
+	- State machine and sequential circuit logic for tracking sensor passes, servo movement angle and RPM calculation values
+- Potentiometer input noise prevention: servo only triggered for potValue >= 100 
+- Signal processing math for display values to adjust for magnitude differences and avoid overlap
+- If-branch based logic for servo response:
+	- Previous for loops forced servo to finish sweep cycle before responding to speed regulation
+	- Goal: immediate response behaviour, adjust speed or stop moving right away depending on potentiometer input changes
+- Planned: after testing, break main up into multiple files and learn how to build & upload multi-file programs to arduino 
 
 ---
 ## Insights & Relevance
