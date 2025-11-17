@@ -89,6 +89,8 @@ void loop () {
 	Serial.print("Pot value:");
 	Serial.println((potValue+1)/100); // +1 because idk if 0/100 should be avoided
 	
+	// TO-DO: add Hall sensor reading to Serial Plotter display
+	
 	
 	if (!digitalRead(sensorPin) && !secondPass) {
 			

@@ -9,22 +9,46 @@ Bought materials and planned sturdier power supply wiring for SG90 servo:
 - Crimp insulation sleeves
 - Electrical tape
 - Zip ties
+- Jumper wires or Dupont wires (see build plan)
 
 ---
 ## ✅ Build plan:
-1. Strip USB-A cable, separate and strip power and GND wires
-2. Separate and strip power and GND wires on hi-fi cable
-3. Twist exposed copper wires together
-4. Cover with crimp sleeve (with slack for the wires to prevent strain)
-5. Use electrical tape and zip ties as needed to reinforce the splice
+
+ ⚠️ Never work on cables when connected to any power source
+
+Note: crimp insulation sleeves will be used to cover splices. Always make sure the splices are shorter than the metal tubing in the tips, adapt stripped wires length accordingly if needed.
+### Splice 1: USB-A <-> Hi-Fi
+1. Strip USB-A power and GND cables (±1.5cm), cut USB-A signal cables. More length needs to be exposed on the thinner USB wires to account for the thicker hi-fi cable wires
+2. Separate and strip hi-fi power and GND wires (±1cm)
+3. Twist exposed copper/metal wires separately
+4. Twist exposed wires together (pigtails)
+5. Cover with insulation sleeve
+6. Use electrical tape and zip ties to fully cover and reinforce the splice, including tube (be careful with mechanical strain when tightening zip ties)
+7. Expose ±0.8cm off other end of spliced hi-fi cables, twist and form a hook small enough for multimeter probes to fit in neatly:
+	- Use hooks to nest multimeter probes for testing before continuing
+	- Reading should be stable ±5V using this method
+
+Depending on the hi-fi wires' thickness, they can be slotted into female Dupont wire ends. In that case:
+- If they can be slotted far enough into the Duponts for good contact:
+	- Isolate and secure the connections with electrical tape (use zip ties if needed to fully seal, mind the mechanical strain).
+
+If that does not work, as was the case for me:
+### Splice 2: Hi-Fi <-> Jumper Wire
+1. Slip insulation sleeves on hi-fi power and GND
+2. Expose more wire off hi-fi cables (±1.5cm)
+3. Twist exposed wires
+4. 'Pigtail' hi-fi wires around jumper wire tip
+5. Slip insulation sleeve over the splice
+	- Note: splice may not fit neatly into the metal casing right away, in my case pushing the jumper wire in was needed
+6. Making sure insulation sleeve stays over splice + splice stays together, use electrical tape to immobilise and cover splice (incl. tube)
+7. Use zip ties to fully seal and reinforce
 
 ---
 ## Test plan:
 
 ### ✅ Test A: Splice test
-1. Strip small section of the hi-fi cables
-2. Connect USB wall adapter to spliced cable and plug it
-3. Use multimeter to test via short exposed copper wires
+1. Connect USB wall adapter to spliced USB+hi-fi cables and plug it
+2. Immobilise jumper wire ends, test with multimeter probes
 
 If there are issues: try using another wall adapter (same V and A).
 
@@ -85,7 +109,7 @@ If servo test works: Hall sensor has been tested and proven to work
 Checked data sheet for servo speed and calculated max RPM and angle covered in one step:
 - 0.1s / 60° -> 0.6s / 360°
 - 60s / 0.6s = 100 RPM
-- 0.1s / 60° and minimum delay of 20ms -> 100ms / 20 ms = 5 -> maximum 60 / 5 = 12° movement between delays -> use to define step increment movement between delays
+- 0.1s / 60° and minimum delay of 20ms -> 100ms / 20 ms = 5 -> maximum 60 / 5 = 12° movement between delays -> use to define step increment ('virtual' max set to 10° for easier math, as 180 is not a multiple of 12)
 
 ---
 ## Rebuild sketch, part 1:
@@ -97,14 +121,9 @@ Checked data sheet for servo speed and calculated max RPM and angle covered in o
 	2. Potentiometer:
 		- Run [servoTestPot](./Tests/servoTestPor.ino)
 		- Use read values to define (inversely proportional) length of delay in servo.move
-		- If pot reads 0: empty if branch, does not call servo.move
-		- Else: map pot values 0 - 1023 to delay values 80ms - 20ms
-		- First test with simpler 10° increment math, then with 12°
-4. Implement 'virtual' RPM value reading and display in serial plotter:
-	- RPM = (20 / delay) * 100
-	- Define getRPM function using this formula
-5. Implement pot values display into serial plotter:
-	- Display value : pot.read / 20 so it fits within RPM range but doesn't overlap or intersect with RPM value
+		- If pot reads <100: empty if branch, does not call servo.move
+		- Else: map pot values 100 - 1023 to angle values 1° - 10° (potValue/100.0)
+4. Implement Hall sensor responses, step angle and pot values display into serial plotter
 
 Test this version, if issues appear work back stepwise to isolate problem.
 
@@ -127,8 +146,3 @@ Test this version, if issues appear work back stepwise to isolate problem.
 Connect circuit to power + computer, upload sketch, test setup and serial plotter display.
 If issues appear, work back stepwise to fix them, then repeat steps until everything works!
 
----
-Notes:
-- What about trying static 20ms delay and vary step angle instead?
-	-> write & test alternative servo.move using new getStepAngle function to convert pot reading into 0° - 12° range 
-- Considering rounding down to 10° maximum step length for simpler math + no edge cases from 180 not being a multiple of 12.

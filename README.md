@@ -5,8 +5,10 @@ Proof-of-concept Arduino project simulating flywheel RPM calculation with a Hall
 
 See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
 
+Current main program draft: [flywheel_hall_v1_draft.cpp](flywheel_hall_v1_draft.cpp) (NOT fully functional or tested yet).
+
 ---
-## Latest Update (16/11): Main Program Refactor Draft (NOT fully functional yet)
+## Latest Update (16/11): Main Program Refactor
 
 - New speed regulation logic now using angle instead of delay
 - Servo previously assumed to move continuously: sweeping movement required changes for accurate 'RPM' calculation -> only count first sensor trigger event, then every other event
@@ -24,6 +26,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 - SG90 standard servo motor (0–180° sweep)
 - Cardboard disc with one magnet stuck to the edge, mounted on the servo
 - Hi-fi power + GND wire roll (for safer, sturdier servo wiring)
+- Jumper and Dupont wires (see Build Plan for details)
 - Additional USB-A cables (for splicing and backup)
 - Crimp insulation tubes, electrical tape, and zip ties for secure connections
 - Multimeter for verification and troubleshooting
@@ -34,7 +37,7 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 ## Functionality
 
 - Push button: turns servo on/off
-- Potentiometer: varies servo speed by adjusting update interval (mapped 20–80 ms)
+- Potentiometer: varies servo speed by adjusting step angle (1° - 10°)
 - Hall sensor: detects magnet passing and calculates instantaneous and averaged RPM
 - Serial output: prints RPM values and potentiometer-derived speed for real-time monitoring
 
@@ -76,8 +79,8 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 **1. Hardware Setup**
 - Connect Arduino Uno to sensor shield.
 - Mount SG90 servo with single magnet disc.
-- Wire Hall sensor, push button, and potentiometer according to standard pin assignments.
-- Ensure power is supplied via USB/hi-fi spliced cable (or alternative safe power source).
+- Wire Hall sensor, push button or potentiometer according to standard pin assignments.
+- Ensure power is supplied via USB/hi-fi(/jumper) spliced cable (or alternative safe power source).
 
 **2. Upload Sketch**
 - Open the Arduino IDE and select the correct board and COM port.
@@ -85,12 +88,11 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 
 **3. Verify Controls**
 - Press the push button: servo should start/stop (on/off control).
-- Adjust potentiometer: servo speed should change inversely with pot reading.
+- Adjust potentiometer: servo speed should change with pot reading.
 
 **4. Check Sensor Output**
 - Observe Hall sensor pulses on Serial Plotter.
-- Virtual RPM display should reflect expected speed based on step/delay mapping.
-- Once Hall sensor is fully integrated, Serial Plotter will show real RPM readings.
+- Once Hall sensor is integrated, Serial Plotter will show RPM readings.
 
 **5. Troubleshooting Tips**
 - If servo does not move: check wiring, power supply, and pin assignments.
@@ -103,6 +105,5 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 
 - Validate potentiometer and push button control for variable-speed operation
 - Integrate Hall sensor to calculate real-time RPM
-- Test Serial Plotter display for both virtual and sensor-derived RPM readings
-- Iterate and refine servo.move logic, step size, and delay mapping for smooth operation
+- Test Serial Plotter display for potentiometer, step angle and RPM readings
 - Progress towards simulating real-world automotive flywheel sensor behaviour

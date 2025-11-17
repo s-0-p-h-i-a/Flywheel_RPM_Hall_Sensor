@@ -6,7 +6,7 @@
 ---
 ## Latest:
 
-### 16/11 Main Program Refactor Draft:
+### 16/11 Main Program Refactor:
 - New logic for speed regulation (angle- instead of delay-based) and servo control
 - Use of state machine and sequential circuit to initialise and keep track of variables across loop
 - New servo control logic for immediate response
@@ -160,7 +160,7 @@
 - Confirmed SG90 is a standard servo (sweeps 0–180°), not continuous rotation; will update logic and RPM calculation to account for sweeping motion and two sensor passes per sweep.
 
 ---
-## 16/11 Main Program Refactor Draft
+## 16/11 Main Program Refactor
 
 - Decided to refactor instead of trying to fix messy v0 code
 
@@ -189,6 +189,4 @@
 ## Next Steps
 
 - Add push button and potentiometer control for SG90.
-- Validate virtual RPM readings in Serial Plotter.
-- Integrate Hall sensor for real RPM measurement.
-- Iterate and refine servo.move logic, step size, and delay mapping.
+- Validate RPM readings in Serial Plotter.
