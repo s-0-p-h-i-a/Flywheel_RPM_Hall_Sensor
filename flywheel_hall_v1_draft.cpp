@@ -42,6 +42,26 @@
  * - Signal processing math for RPM, angle and pot value display: so that all variable variations can be visualised
  * at once without overlap + without loss of detail (angle, RPM, and pot value all have different magnitudes)
  * 
+ * 19/11 CODE REVIEW & TESTING
+ * 
+ * Issue noticed:
+ * - With speed/step angle varying, sweep math can fail
+ * 		- Example:
+ * 		- Servo position 176°. Servo speed set to 10° angles. The next loop will send the servo to 186°
+ * 		- Question: how does this servo handle 'spill over' angle position commands?
+ * - Test: Set servo near 0° and 180°, then test 'spill over' behaviour
+ * - Test for various edge cases
+ * 
+ * Outcomes:
+ * 		- Spill over simply ignored -> scale angle steps to 1°-12°
+ * 		- Spill over transformed into return angle -> also scale angle steps to 1°-12°
+ * 		-> If spill over effect stays within normal behaviour, it doesn't actually matter
+ * 		- If spill over causes unexpected/undesired behaviour: go back to delay-based speed control logic
+ * 
+ * Result: spill-over simply ignored, anything below 0° acts like 0°, same for 180°
+ * 
+ * -> New math for pot value mapping: potValue/85 (is max 12°)
+ * 
  * TO-DO:
  * - Integrate RGB LED for RPM visualisation?
  * 	- 3 phases (based on potentiometer reading):
@@ -54,6 +74,8 @@
  * 	- Phase 1: 255 Green, 0 Blue -> 128 Green, 127 Blue
  * 	- Phase 2: 127 Green, 128 Blue -> 0 Green, 255 Blue ; 255 Blue, 0 Red -> 127 Blue, 128 Blue, 127 Red
  * 	- Phase 3: 127 Blue - 128 Red -> 0 Blue - 255 Red
+ * 
+ * - Consider smoothing pot values in case flickers affect servo movement smoothness?
  * 
  * **/
 

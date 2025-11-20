@@ -5,7 +5,7 @@ Sketch test scripts to prepare for hardware debugging and testing.
 
 See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guide to wiring, component testing, and control logic implementation.
 
-**NOTE:** main and test scripts still contain logic mistakes to be fixed later
+**NOTE:** not all test scripts are fully functional
 
 ---
 
@@ -24,3 +24,13 @@ See [Build & Test Plan](Build_and_Test_Plan.md) for a detailed step-by-step guid
 ### Potentiometer Control Test:
 
 - [servoTestPot.ino](./Test_Drafts/servoTestPot.ino): level 1 continuous movement function, level 2 maps servo speed to potentiometer reading
+
+---
+### Spill-over Test:
+
+- [servoTest_Spillover.ino](./Test_Drafts/servoTest_Spillover.ino): mini script used to test servo behaviour for angle input outside of 0-180 range
+
+---
+### 3 Buttons Test:
+
+- [servoTest3Buttons.ino](./Test_Drafts/servoTest3Buttons.ino): WORK IN PROGRESS script to test & implement servo control via 3 buttons: one for ON/OFF, one for accelerating, one for slowing down

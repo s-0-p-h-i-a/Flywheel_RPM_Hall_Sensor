@@ -16,7 +16,7 @@ void loop() {
 	
 	bool buttonState = digitalRead(buttonPin);
 
-	if (buttonState) {
+	if (!buttonState) {
 		Serial.print("Pressed");
 		moveServo();    
 	} 
@@ -24,13 +24,13 @@ void loop() {
    
 void moveServo() {
 	
-	for (pos = 0; pos < 180; pos += 10) { 
+	for (int pos(0); pos < 180; pos += 10) { 
 
     serv0.write(pos);
     delay(15);
   }
 
-  for (pos = 180; pos >= 0; pos -= 10) { 
+  for (int pos(180); pos >= 0; pos -= 10) { 
 
     serv0.write(pos);           
     delay(15);

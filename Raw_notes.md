@@ -106,46 +106,85 @@ implemented
 
 # 16/11
 
-FLYWHEEL HALL SENSOR EMULATION V1.0 DRAFT
+/** FLYWHEEL HALL SENSOR EMULATION V1.0 DRAFT
+ * 
+ * NOTE: CODE MAY NOT BE FUNCTIONAL, HAS NOT BEEN TESTED OR REVIEWED YET
+ * COMMITTING TO REPO FOR PROGRESS TRACKING
+ * 
+ * 15/11
+ * 
+ * V0 was not functional but this is a departure from the original concept, so v1.0
+ * 
+ * CHANGES:
+ * - Speed regulation: using angle instead of delay:
+ * 	- if potValue > 100: servoAngle =  round(potValue/103.0)
+ * 		-> between 1° and 10°, division by 103.0 to avoid max angle values above 10°
+ * 
+ * CONCEPT:
+ * - Since servo sweeps back and forth, Hall sensor response logic needs to change:
+ * 	- Issues: sensor triggered twice per 'revolution', time interval of magnet passing below sensor
+ * 	would make RPM calculation out of sync with real-life behaviour
+ * 	-> Only count first sensor pass then every other pass
+ * 
+ * - Implemented state machine logic for secondPass:
+ * 	-> Was initially inside getRPM, then its own function, then moved secondPass update inside void loop:
+ * 		this state needs to be re-checked and tracked at every loop regardless of RPM calculation
+ * 	-> Intentional global variables for values that need 'memory' outside of individual loop runs
+ * 
+ * - Sequential circuit based logic for thisRPM, lastRPM, currentSensorRead, lastSensorRead:
+ * 	-> values initialised at 0 = sending initial 0 signal to set circuit
+ * 
+ * - Defined 'safety range' for pot values to avoid irregularities due to flickering input current:
+ * Only values above 100 trigger servo movement
+ * 
+ * - Split servo movement into separate sweepServo and moveServo functions for logical separation and 
+ * modularity for future changes
+ * 
+ * - Defined easier to implement logic for speed regulation + state machine concept for program execution and
+ * cross-loop state tracking -> straightforward refactor process, no conceptual/logic issue points
+* 
+ * - Trying out if-based logic for immediate response to speed regulation (previous for loops made servo finish
+ * sweep before updating speed)
+ * 
+ * 
+ * DATA VISUALISATION:
+ * - Signal processing math for RPM, angle and pot value display: so that all variable variations can be visualised
+ * at once without overlap + without loss of detail (angle, RPM, and pot value all have different magnitudes)
+ * 
+ * **/
 
-NOTE: CODE MAY NOT BE FUNCTIONAL, HAS NOT BEEN TESTED OR REVIEWED YET
-COMMITTING TO REPO FOR PROGRESS TRACKING
+# 19/11
+## Pot & speed control:
 
-15/11
- 
-V0 was not functional but this is a departure from the original concept, so v1.0
- 
-CHANGES:
-- Speed regulation: using angle instead of delay:
-	- if potValue > 100: servoAngle =  round(potValue/103.0)
-		-> between 1° and 10°, division by 103.0 to avoid max angle values above 10°
+- Button module worked
+## Rebuild Sketch, Part 1:
+-  Add potentiometer:
+	-  Run [servoTestPot](./Tests/servoTestPor.ino)
+	- Use read values to define (inversely proportional) length of delay in servo.move
+	- If pot reads <100: empty if branch, does not call servo.move
+	- Else: map pot values 100 - 1023 to angle values 1° - 12° (potValue/85.0)
+	- Add hysteresis for smoother behaviour?: speed only changes if potValue changes more than ±10
 
-CONCEPT:
-- Since servo sweeps back and forth, Hall sensor response logic needs to change:
-	- Issues: sensor triggered twice per 'revolution', time interval of magnet passing below sensor
-	would make RPM calculation out of sync with real-life behaviour
-	-> Only count first sensor pass then every other pass
+Test this version, if issues appear work back stepwise to isolate problem.
 
-- Implemented state machine logic for secondPass:
- 	-> Was initially inside getRPM, then its own function, then moved secondPass update inside void loop:
-		this state needs to be re-checked and tracked at every loop regardless of RPM calculation
-	-> Intentional global variables for values that need 'memory' outside of individual loop runs
+Notes:
+- Tried different logic for servomove, servo responded to pot input changes but not as desired
+- Test had to be stopped due to pot getting warm
+- Alternative solution: 2 buttons:
+	- 1 Button module for on/off
+	- 2 Breadboard buttons for faster/slower
+- Idea for later testing: joystick 
 
-- Sequential circuit based logic for thisRPM, lastRPM, currentSensorRead, lastSensorRead:
-	-> values initialised at 0 = sending initial 0 signal to set circuit
+Write servoTest3Buttons with new speed regulation logic
 
-- Defined 'safety range' for pot values to avoid irregularities due to flickering input current:
- Only values above 100 trigger servo movement
+Issues:
+- Breadboard buttons not getting picked up
+- LED stays on with dim light, no response to buttons
+- Tried different pins, different wiring configurations
 
-- Split servo movement into separate sweepServo and moveServo functions for logical separation and 
- modularity for future changes
-
-- Defined easier to implement logic for speed regulation + state machine concept for program execution and
- cross-loop state tracking -> straightforward refactor process, no conceptual/logic issue points
-
-- Trying out if-based logic for immediate response to speed regulation (previous for loops made servo finish
- sweep before updating speed)
-
-DATA VISUALISATION:
-- Signal processing math for RPM, angle and pot value display: so that all variable variations can be visualised
-at once without overlap + without loss of detail (angle, RPM, and pot value all have different magnitudes)
+Main things today:
+- Servo powering via button worked
+- Potentiometer was causing servo response, probably from code. Did not figure out this issue as pot started getting warm
+- Rewrote some tests
+- Added 3 buttons test script
+- Trying new servo movement logic ideas

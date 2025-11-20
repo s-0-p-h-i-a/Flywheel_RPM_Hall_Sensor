@@ -1,17 +1,16 @@
 #include <Servo.h>
-#include <map>
 
 const int potPin(A0);
 const int servoPin(7);
 Servo serv0;
 
-int servoAngle(0);
+/**int servoAngle(5);
 int servoDirection(1);
 unsigned long lastServoMove(0);
 
 int lastAngle(0);
 int secondLastAngle(0);
-int currentAngle(0);
+int currentAngle(0);**/
 
 void setup() {
 	serv0.attach(servoPin);
@@ -19,45 +18,54 @@ void setup() {
 	Serial.begin(9600);
 }
 
-void moveServo1(unsigned long now);
-void moveServo2(unsigned long now, int wait);
+void moveServo();
+//void moveServo1(unsigned long now);
+//void moveServo2(unsigned long now, int wait);
 
 void loop() {
 	
-	unsigned long now = millis();
+	//unsigned long now = millis();
 
 	int potLevel = analogRead(potPin);
-	int wait(20);
+	//int wait(20);
 	
 	// "Zero" range to account for current flicker
-	if (potLevel == 0 || potLevel < 5) { }
+	if (potLevel < 50) { ;}
 	
 	else {
 		
 		Serial.print("Pot ON");
 		
 		// Level 1 continuous speed movement
-		moveServo1(now);
+		moveServo();
 		
 		// Level 2 map speed to pot level
-		wait = 80 - potLevel * (60.0/1023.0);
-		moveServo2(now, wait);
+		/** wait = 80 - potLevel * (60.0/1023.0);
+		moveServo2(now, wait); **/
 	} 
 }
+
+void moveServo() {
+
+	serv0.write(0);
+	delay(15);
+	serv0.write(180);
+
+}
  
+/**
 // 10° steps 
 void moveServo1(unsigned long now) {
 	
 	if (now - lastServoMove >= 20) { 
-		servoAngle += servoDirection;
 
 	if (servoAngle >= 0 && servoAngle < 180) {
 		servoDirection = 10;
 		}
-    else if (servoAngle >= 180) {
+    else if (servoAngle = 180) {
 		servoDirection = -10;
 		}
-
+		servoAngle += servoDirection;
     serv0.write(servoAngle);
     lastServoMove = now;
   }
@@ -108,3 +116,4 @@ void moveServo2(unsigned long now, int wait) {
 	}
 }
 
+**/

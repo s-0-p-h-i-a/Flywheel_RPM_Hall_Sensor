@@ -1,4 +1,4 @@
-# Part 1: Servo power supply debugging
+# ✅ Part 1: Servo Power Supply Debugging
 
 Looked up wire splicing tutorials.
 Bought materials and planned sturdier power supply wiring for SG90 servo:
@@ -9,7 +9,18 @@ Bought materials and planned sturdier power supply wiring for SG90 servo:
 - Crimp insulation sleeves
 - Electrical tape
 - Zip ties
+
+Existing material:
+
 - Jumper wires or Dupont wires (see build plan)
+- Arduino Uno
+- V5 Sensor shield
+- Hall sensor module
+- SG90 mini servo
+- Button/Button module
+- Potentiometer
+- 220 Ω resistor
+- LED light
 
 ---
 ## ✅ Build plan:
@@ -56,7 +67,7 @@ If there are issues: try using another wall adapter (same V and A).
 - Result: stable 5.09V reading
 
 ---
-### ## ✅ Test B1: Breadboard connections test level 1
+### ## ✅ Test B: Breadboard Test
 1. Strip more off hi-fi cables
 2. Test if twisted exposed wires are strong enough to go into breadboard slots:
 	1. If yes and contact is solid: continue with this setup
@@ -67,23 +78,14 @@ If there are issues: try using another wall adapter (same V and A).
 
 If there are issues: check wiring, try a different LED, resistor, or breadboard.
 
----
-### Test B2: Breadboard connections test level 2
-1. Add relevant resistor and push button and/or potentiometer to breadboard wiring
-2. Test turning LED on/off via push button and/or potentiometer
-
-This is to test power supply across the whole board.
-
-If issues: check wiring, try different components.
-
 Sensor shield and arduino board have been proven to work, move on to testing servo.
 
 ---
-### ✅  If Tests B1 and B2 pass:
+### ✅  If Test B passes:
 1. Connect servo power and GND to breadboard, signal to arduino board
 2. Connect arduino to computer, run [servoTest1](./Tests/servoTest1.ino)
 
-If it doesn't work:
+If it doesn't work: Test C
 
 ---
 ### Test C:
@@ -99,9 +101,9 @@ If it doesn't work:
 If it still doesn't work: retrace steps until issue found + solved.
 
 ---
-# Part 2: Progressive rebuild & test procedure
+# Part 2: Progressive Rebuild & Test Procedure
 
-If servo test works: Hall sensor has been tested and proven to work
+If servo test works: since Hall sensor has been tested and proven to work:
 -> introduce control button/potentiometer into sketch first before integrating sensor so that they can more easily be isolated.
 
 ---
@@ -109,26 +111,45 @@ If servo test works: Hall sensor has been tested and proven to work
 Checked data sheet for servo speed and calculated max RPM and angle covered in one step:
 - 0.1s / 60° -> 0.6s / 360°
 - 60s / 0.6s = 100 RPM
-- 0.1s / 60° and minimum delay of 20ms -> 100ms / 20 ms = 5 -> maximum 60 / 5 = 12° movement between delays -> use to define step increment ('virtual' max set to 10° for easier math, as 180 is not a multiple of 12)
+- 0.1s / 60° and minimum delay of 20ms -> 100ms / 20 ms = 5 -> maximum 60 / 5 = 12° movement between delays -> use to define step increment 
 
 ---
-## Rebuild sketch, part 1:
+## ✅ Servo Code Test + 'Spill Over' Angle Test
+
 1. Run [servoTest1](./Tests/servoTest1.ino) with 5° increments
 2. If test run ok: edit servo.move so the steps are 10°
-3. Add control:
-	1. Button:
-		- Run [servoTestButton](./Tests/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
-	2. Potentiometer:
-		- Run [servoTestPot](./Tests/servoTestPor.ino)
-		- Use read values to define (inversely proportional) length of delay in servo.move
-		- If pot reads <100: empty if branch, does not call servo.move
-		- Else: map pot values 100 - 1023 to angle values 1° - 10° (potValue/100.0)
-4. Implement Hall sensor responses, step angle and pot values display into serial plotter
+3. Add button:
+	- Run [servoTestButton](./Tests/servoTestButton.ino) : simple on/off, fixed speed (10° increment). Button ON -> servo.move function runs. Speed can be manually slowed down by pressing and releasing button in intervals
+4. Run [servoTest_Spillover](./Tests/servoTest_Spillover.ino)
+5. Possible outcomes:
+	- Spill over ignored -> max step now 12°
+	- Spill over transformed into backwards movement -> same
+	- Spill over causes unexpected/undesired behaviour -> change speed regulation to delay-based instead of angle-based
+
+Result: spill over ignored: anything below 0° acts like 0°, same for 180°
+
+
+---
+## Rebuild Sketch, Part 1:
+-  Add potentiometer:
+	-  Run [servoTestPot](./Tests/servoTestPor.ino)
+	- Use read values to define (inversely proportional) length of delay in servo.move
+	- If pot reads <100: empty if branch, does not call servo.move
+	- Else: map pot values 100 - 1023 to angle values 1° - 12° (potValue/85.0)
+	- Add hysteresis for smoother behaviour?: speed only changes if potValue changes more than ±10
 
 Test this version, if issues appear work back stepwise to isolate problem.
 
+Notes:
+- Tried different logic for servomove, servo responded to pot input changes but not as desired
+- Test had to be stopped due to pot getting warm
+- Alternative solution: 2 buttons:
+	- 1 Button module for on/off
+	- 2 Breadboard buttons for faster/slower
+- Idea for later testing: joystick 
+
 ---
-## Rebuild sketch, part 2:
+## Rebuild Sketch, Part 2:
 1. Integrate Hall sensor reading into sketch: 
 	- Define pin constant
 	- Initialise sensor
@@ -164,3 +185,4 @@ If issues appear, work back stepwise to fix them, then repeat steps until everyt
  * Phase 3:
 	 * 127 Blue - 128 Red
 	 * -> 0 Blue - 255 Red
+- Add hysteresis to prevent flickering?
