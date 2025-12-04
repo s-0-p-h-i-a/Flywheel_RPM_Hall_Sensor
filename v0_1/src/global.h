@@ -1,0 +1,15 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern unsigned long now;
+extern unsigned long timeWindow;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
